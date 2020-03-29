@@ -1,4 +1,4 @@
-
+CREATE SCHEMA ticketing
 
 CREATE TABLE ticketing.user (
 	id bigserial NOT NULL,
