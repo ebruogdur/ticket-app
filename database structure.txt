@@ -1,0 +1,138 @@
+
+
+CREATE TABLE ticketing.user (
+	id bigserial NOT NULL,
+	company_id int8 NOT NULL,
+	uuid uuid NOT NULL,
+	created_by int8 NOT NULL,
+	created_time timestamptz NOT NULL,
+	last_updated_by int8 NOT NULL,
+	last_updated_time timestamptz NOT NULL,
+	status bpchar(1) NOT NULL DEFAULT '1'::bpchar,
+	user_name varchar(128) NOT NULL,
+	user_email varchar(128) NOT NULL,
+	password_hash_sha512 varchar(128) NOT NULL,
+	last_login_time timestamptz NULL,
+	last_password_update_time timestamptz NULL,
+	language_code varchar(16) NULL,
+	timezone varchar(64) NULL,
+	full_name varchar(128) NOT NULL,
+	CONSTRAINT user_email_un UNIQUE (company_id, user_email),
+	CONSTRAINT user_name_un UNIQUE (company_id, user_name),
+	CONSTRAINT user_pk PRIMARY KEY (id),
+	CONSTRAINT user_un UNIQUE (uuid)
+);
+
+
+
+
+
+CREATE TABLE ticketing.company (
+	id bigserial NOT NULL,
+	uuid uuid NOT NULL,
+	created_by int8 NOT NULL,
+	created_time timestamptz NOT NULL,
+	last_updated_by int8 NOT NULL,
+	last_updated_time timestamptz NOT NULL,
+	status bpchar(1) NOT NULL DEFAULT '1'::bpchar,
+	code_name varchar(128) NOT NULL,
+	name varchar(128) NOT NULL,
+	formal_name varchar(512) NOT NULL,
+	description varchar(512) NOT NULL,
+	domain_name varchar(128) NOT NULL DEFAULT 'localhost'::character varying,
+	CONSTRAINT company_pk PRIMARY KEY (id),
+	CONSTRAINT company_un UNIQUE (uuid),
+	CONSTRAINT company_un1 UNIQUE (code_name),
+	CONSTRAINT company_un2 UNIQUE (domain_name)
+);
+
+
+
+
+CREATE TABLE ticketing.airport (
+	id bigserial NOT NULL,
+	company_id int8 NOT NULL,
+	uuid uuid NOT NULL,
+	created_by int8 NOT NULL,
+	created_time timestamptz NOT NULL,
+	last_updated_by int8 NOT NULL,
+	last_updated_time timestamptz NOT NULL,
+	address varchar(512) NOT NULL,
+	name varchar(512) NOT NULL,
+	code varchar(512) NOT NULL,
+	gate_count int8 NOT NULL,
+	city varchar(512) NOT NULL,
+	country varchar(512) NOT NULL,
+	status bpchar(1) NOT NULL DEFAULT '1'::bpchar,
+	CONSTRAINT airport_pk PRIMARY KEY (id),
+	CONSTRAINT airport_un UNIQUE (uuid)
+);
+
+
+
+
+CREATE TABLE ticketing.route (
+	id bigserial NOT NULL,
+	company_id int8 NOT NULL,
+	uuid uuid NOT NULL,
+	created_by int8 NOT NULL,
+	created_time timestamptz NOT NULL,
+	last_updated_by int8 NOT NULL,
+	last_updated_time timestamptz NOT NULL,
+	start_point varchar(512) NOT NULL,
+	end_point varchar(512) NOT NULL,
+	status bpchar(1) NOT NULL DEFAULT '1'::bpchar,
+	CONSTRAINT route_pk PRIMARY KEY (id),
+	CONSTRAINT route_un UNIQUE (uuid)
+);
+
+
+CREATE TABLE ticketing.flight (
+	id bigserial NOT NULL,
+	company_id int8 NOT NULL,
+	uuid uuid NOT NULL,
+	created_by int8 NOT NULL,
+	created_time timestamptz NOT NULL,
+	last_updated_by int8 NOT NULL,
+	last_updated_time timestamptz NOT NULL,
+	code varchar(512) NOT NULL,
+	from_airport_id  int8 NOT NULL,
+	to_airport_id int8 NOT NULL,
+	flight_date date NOT NULL,
+	quota int8 NOT NULL,
+	flight_duration_in_minutes int4 NOT NULL,
+	route_id int8 NOT NULL,
+	price  numeric(22,4) NOT NULL,
+	status bpchar(1) NOT NULL DEFAULT '1'::bpchar,
+	CONSTRAINT flight_pk PRIMARY KEY (id),
+	CONSTRAINT flight_un UNIQUE (uuid)
+);
+
+
+
+
+CREATE TABLE ticketing.ticket (
+	id bigserial NOT NULL,
+	company_id int8 NOT NULL,
+	uuid uuid NOT NULL,
+	created_by int8 NOT NULL,
+	created_time timestamptz NOT NULL,
+	last_updated_by int8 NOT NULL,
+	last_updated_time timestamptz NOT NULL,
+	ticket_number varchar(512) NOT NULL,
+	flight_id int8 NOT NULL,
+	passenger_name varchar(512) NOT NULL,
+	passenger_surname varchar(512) NOT NULL,
+	passenger_identity_card_no varchar(64) NOT NULL,
+	cabin varchar(64) NOT NULL,
+	seat_no varchar(64) NOT NULL,
+	gate_no varchar(64) NOT NULL,
+	amount numeric(22,4) NOT NULL,
+	currency varchar(3) NOT NULL,
+	vat numeric(4,2) NOT NULL,
+	status bpchar(1) NOT NULL DEFAULT '1'::bpchar,
+	CONSTRAINT ticket_pk PRIMARY KEY (id),
+	CONSTRAINT ticket_un UNIQUE (uuid)
+);
+
+
